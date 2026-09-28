@@ -2,13 +2,31 @@
 from board import Board
 
 
+def ask_move(board, mark):
+    while True:
+        raw = input(f"Player {mark}, choose 1-9: ").strip()
+        if not raw.isdigit():
+            print("Please enter a number between 1 and 9.")
+            continue
+        move = int(raw) - 1
+        if board.place(move, mark):
+            return
+        print("That square is not available.")
+
+
 def play():
     board = Board()
     current = "X"
-    while not board.is_full():
+    while True:
         print(board)
-        move = int(input(f"Player {current}, choose 1-9: ")) - 1
-        if board.place(move, current):
-            current = "O" if current == "X" else "X"
-    print(board)
-    print("Game over")
+        ask_move(board, current)
+        winner = board.winner()
+        if winner:
+            print(board)
+            print(f"Player {winner} wins!")
+            return
+        if board.is_full():
+            print(board)
+            print("It's a draw.")
+            return
+        current = "O" if current == "X" else "X"
