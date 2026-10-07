@@ -1,5 +1,6 @@
-"""Two player game loop."""
+"""Game loop supporting human and computer players."""
 from board import Board
+import ai
 
 
 def ask_move(board, mark):
@@ -14,19 +15,23 @@ def ask_move(board, mark):
         print("That square is not available.")
 
 
-def play():
+def play(vs_computer=False, ai_mark="O"):
     board = Board()
     current = "X"
     while True:
         print(board)
-        ask_move(board, current)
+        if vs_computer and current == ai_mark:
+            board.place(ai.random_move(board, current), current)
+            print(f"Computer ({current}) moved.")
+        else:
+            ask_move(board, current)
         winner = board.winner()
         if winner:
             print(board)
             print(f"Player {winner} wins!")
-            return
+            return winner
         if board.is_full():
             print(board)
             print("It's a draw.")
-            return
+            return None
         current = "O" if current == "X" else "X"
