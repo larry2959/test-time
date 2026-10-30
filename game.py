@@ -15,13 +15,14 @@ def ask_move(board, mark):
         print("That square is not available.")
 
 
-def play(vs_computer=False, ai_mark="O"):
+def play(vs_computer=False, ai_mark="O", difficulty="easy"):
     board = Board()
     current = "X"
     while True:
         print(board)
         if vs_computer and current == ai_mark:
-            board.place(ai.random_move(board, current), current)
+            pick = ai.best_move if difficulty == "hard" else ai.random_move
+            board.place(pick(board, current), current)
             print(f"Computer ({current}) moved.")
         else:
             ask_move(board, current)
